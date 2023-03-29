@@ -1,0 +1,266 @@
+#include <iostream>
+#include <locale>
+#include <cmath>
+
+using namespace std;
+
+// 3 * pow(x,4) + 4 * pow(x,3) - 12 * pow(x,2) + 1 = 0
+
+//Используя методы нахождения корней нелинейного уравнения, найти все корни
+//уравнения в соответствии с индивидуальным вариантом с заданной точностью
+
+int main()
+{
+	int cycle = 1, button = 0;
+	double eps1 = 0.0, a1 = 0.0, b1 = 0.0, f1 = 0.0, f11 = 0.0, f12 = 0.0, t1 = 0.0, x1 = 0.0;
+	int n1 = 0;
+
+	double eps2 = 0.0, a2 = 0.0, b2 = 0.0, f2 = 0.0, f21 = 0.0, f22 = 0.0, fz = 0.0, z2 = 0.0, x2 = 0.0, h2 = 0.0;
+	int n2 = 0;
+
+	double eps3 = 0.0, a3 = 0.0, b3 = 0.0, f3 = 0.0, f31 = 0.0 , f32 = 0.0, x3 = 0.0, h3 = 0.0, df1 = 0.0;
+	int n3 = 0;
+
+	double x40 = 0.0, eps4 = 0.0, a4 = 0.0, b4 = 0.0, N4 = 0.0, f4 = 0.0, f41 = 0.0, f42 =0.0, x4 = 0.0;
+	int n4 = 0;
+
+	double eps5 = 0.0, a5 = 0.0, b5 = 0.0, f5 = 0.0, x5 = 0.0, x50 = 0.0, x51 = 0.0;
+	int n5 = 0;
+	
+	double eps6 = 0.0, a6 = 0.0, b6 = 0.0, x6 = 0.0, f6 = 0.0;
+	int n6 = 0;
+
+	setlocale(LC_ALL, "RUS");
+	while (cycle) {
+		cout << "Выберите пункт меню"s << endl;
+		cout << "1 - метод дихотомии"s << endl;
+		cout << "2 - метод хорд"s << endl;
+		cout << "3 - метод касательных"s << endl;
+		cout << "3 - метод касательных"s << endl; 
+		cout << "4 - метод простых итераций"s << endl;
+		cout << "5 - метод секущих"s << endl; 
+		cout << "6 - комбинированный метод хорд и касательных"s << endl;
+		cin >> button;
+
+		switch (button) {
+		case 1:
+
+			cout << "введите точки отрезка"s << endl;
+			cin >> a1 >> b1;
+			cout << "введите погрешность"s << endl;
+			cin >> eps1;
+
+			if ((3 * pow(a1, 4) + 4 * pow(a1, 3) - 12 * pow(a1, 2) + 1) * (3 * pow(b1, 4) + 4 * pow(b1, 3) - 12 * pow(b1, 2) + 1) < 0)
+			{
+				f1 = (3 * pow(a1, 4) + 4 * pow(a1, 3) - 12 * pow(a1, 2) + 1);
+				n1 = 1;
+				link1:
+				t1 = (a1 + b1) / 2;
+				f12 = (3 * pow(t1, 4) + 4 * pow(t1, 3) - 12 * pow(t1, 2) + 1);
+				if (f11 * f12 < 0)
+				{
+					b1 = t1;
+				}
+				else
+				{
+					a1 = t1;
+					f11 = f12;
+				}
+				n1 = n1 + 1;
+				if (fabs(b1 - a1) <= eps1)
+				{
+					x1 = (a1 + b1) / 2;
+					f1 = 3.0 * pow(x1, 4) + 4 * pow(x1, 3) - 12 * pow(x1, 2) + 1.0;
+				}
+				else
+				{
+					goto link1;
+				}
+			}
+			else
+			{
+				cout << "Корней нет"s << endl;
+			}
+
+			cout << "x = "s << x1 << " f = "s << f1 << " n = " << n1 << endl;
+			system("pause");
+			break;
+		case 2:
+
+			cout << "введите точки отрезка"s << endl;
+			cin >> a2 >> b2;
+			cout << "введите погрешность"s << endl;
+			cin >> eps2;
+
+			if ((3 * pow(a2, 4) + 4 * pow(a2, 3) - 12 * pow(a2, 2) + 1) * (3 * pow(b2, 4) + 4 * pow(b2, 3) - 12 * pow(b2, 2) + 1) < 0)
+			{
+				f21 = (3 * pow(a2, 4) + 4 * pow(a2, 3) - 12 * pow(a2, 2) + 1);
+				f22 = (3 * 4 * pow(a2, 3) + 4 * 3 * pow(a2, 2) - 12 * 2 * a2);
+				n2 = 1;
+				if (f21 * f22 > 0)
+				{
+					x2 = b2;
+					z2 = a2;
+				}
+				else
+				{
+					x2 = a2;
+					z2 = b2;
+				}
+				fz = 3 * pow(z2, 4) + 4 * pow(z2, 3) - 12 * pow(z2, 2) + 1;
+				link2:
+				f21 = 3 * pow(x2, 4) + 4 * pow(x2, 3) - 12 * pow(x2, 2) + 1;
+				h2 = (x2 - z2) / (f21 - fz) * f21;
+				x2 = x2 - h2;
+				n2 = n2 + 1;
+
+				if (fabs(h2) <= eps2)
+				{
+					f2 = 3 * pow(x2, 4) + 4 * pow(x2, 3) - 12 * pow(x2, 2) + 1;
+				}
+				else
+				{
+					goto link2;
+				}
+			}
+			else
+			{
+				cout << "Корней нет"s << endl;
+			}
+
+
+			cout << "x = "s << x2 << " f = "s << f2 << " n = " << n2 << endl;
+			system("pause");
+			break;
+
+		case 3:
+			cout << "введите точки отрезка"s << endl;
+			cin >> a3 >> b3;
+			cout << "введите погрешность"s << endl;
+			cin >> eps3;
+
+			if ((3 * pow(a3, 4) + 4 * pow(a3, 3) - 12 * pow(a3, 2) + 1) * (3 * pow(b3, 4) + 4 * pow(b3, 3) - 12 * pow(b3, 2) + 1) < 0)
+			{
+				f31 = (3 * pow(b3, 4) + 4 * pow(b3, 3) - 12 * pow(b3, 2) + 1);
+				f32 = (3 * 4 * pow(b3, 3) + 4 * 3 * pow(b3, 2) - 12 * 2 * b3);
+				n3 = 1;
+				if (f31 * f32 > 0)
+				{
+					x3 = b3;
+				}
+				else
+				{
+					x3 = a3;
+				}
+				link3:
+				f3 = (3 * pow(x3, 4) + 4 * pow(x3, 3) - 12 * pow(x3, 2) + 1);
+				df1 = f32 = (3 * 4 * pow(x3, 3) + 4 * 3 * pow(x3, 2) - 12 * 2 * x3);
+				h3 = f3 / df1;
+				x3 = x3 - h3;
+				if (abs(h3) <= eps3)
+				{
+					f3 = (3 * pow(x3, 4) + 4 * pow(x3, 3) - 12 * pow(x3, 2) + 1);
+				}
+				else
+				{
+					goto link3;
+				}
+			}
+			else
+			{
+				cout << "На этом отрезке нет корней"s << endl;
+			}
+
+			cout << "x = "s << x3 << " f = "s << f3 << " n " << n3 << endl;
+			system("pause");
+			break;
+
+		case 4:
+			cout << "введите точки отрезка"s << endl;
+			cin >> a4 >> b4;
+			cout << "введите погрешность"s << endl;
+			cin >> eps4;
+			cout << "введите N" << endl;
+			cin >> N4;
+
+			if ((3 * pow(a4, 4) + 4 * pow(a4, 3) - 12 * pow(a4, 2) + 1) * (3 * pow(b4, 4) + 4 * pow(b4, 3) - 12 * pow(b4, 2) + 1) < 0)
+			{
+				x40 = a4 || b4;
+				n4 = 1;
+				link4:
+				x4 = (3 * 4 * pow(x40, 3) + 4 * 3 * pow(x40, 2) - 12 * 2 * x40);
+				n4 = n4 + 1;
+				if ((abs(x4 - x40) <= eps4) || (n4 >= N4))
+				{
+					f4 = (3 * pow(x4, 4) + 4 * pow(x4, 3) - 12 * pow(x4, 2) + 1);
+				}
+				else
+				{
+					goto link4;
+				}
+			}
+			else
+			{
+				cout << "На этом отрезке корней нет"s << endl;
+			}
+			cout << "x = "s << x4 << " f = "s << f4 << " n " << n4 << endl;
+			system("pause");
+			break;
+
+		case 5:
+			cout << "введите точки отрезка"s << endl;
+			cin >> a5 >> b5;
+			cout << "введите погрешность"s << endl;
+			cin >> eps5;
+			link5:
+			x5 = x51 - ((a5-b5)/((3 * pow(a5, 4) + 4 * pow(a5, 3) - 12 * pow(a5, 2) + 1)- (3 * pow(b5, 4) + 4 * pow(b5, 3) - 12 * pow(b5, 2) + 1))) * (3 * pow(x51, 4) + 4 * pow(x51, 3) - 12 * pow(x51, 2) + 1);
+
+			if ( abs(x5-x51) < eps5  )
+			{
+				cout << "x = "s << x5 << " f = "s << (3 * pow(x5, 4) + 4 * pow(x5, 3) - 12 * pow(x5, 2) + 1) << " n ="s << n5 << endl;
+			}
+			else
+			{
+			x51 = x5;
+			x50 = x51;
+			n5 = n5 + 1;
+			goto link5;
+			}
+			system("pause");
+			break;
+
+		case 6:
+			cout << "введите точки отрезка"s << endl;
+			cin >> a6 >> b6;
+			cout << "введите погрешность"s << endl;
+			cin >> eps6;
+		link6:
+
+			a6 = a6 + 1;
+			x6 = (a6 + b6) / 2;
+
+			if ((3 * pow(x6, 4) + 4 * pow(x6, 3) - 12 * pow(x6, 2) + 1) <= eps6)
+			{
+				cout << "x = "s << x6 << " f = "s << (3 * pow(x6, 4) + 4 * pow(x6, 3) - 12 * pow(x6, 2) + 1) << " n = "s << n6 << endl;
+			}
+			else
+			{
+				n6 = n6 + 1;
+				goto link6;
+			}
+
+			system("pause");
+			break;
+
+		default:
+			system("pause");
+			cycle = 0;
+			break;
+		}
+	}
+	return 0;
+}
+
+// https://studfile.net/preview/10084694/page:4/
+
+// https://matica.org.ua/metodichki-i-knigi-po-matematike/vychislitelnaia-matematika-praktikum/2-4-metody-resheniia-nelineinykh-uravnenii-kombinirovannyi-metod-khord-i-kasatelnykh
